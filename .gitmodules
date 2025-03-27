@@ -1,0 +1,3 @@
+[submodule "VLMs/Janus"]
+	path = VLMs/Janus
+	url = https://github.com/deepseek-ai/Janus
