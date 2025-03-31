@@ -35,10 +35,6 @@ python src/content_description/generate_summary_from_img_text.py --input_dir /pa
 ```
 
 ## Climate Alignment Index (CAQ)
-
-The Climate Alignment Index (CAQ) is a novel metric designed to:
-- Quantify the relevance and accuracy of climate descriptions.
-- 
 CAQ routines and evaluations are integrated into the repository (see `caq.py` in the root directory for CAQ-related functionalities).
 
 ## Generating LLM Responses
