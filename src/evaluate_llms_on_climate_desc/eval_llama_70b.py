@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append("/scratch/user/hasnat.md.abdullah/Climmeme/src")
+sys.path.append("Climmeme/src")
 
 from caq import ClimateAlignmentQuotient
 from datasets import load_dataset
@@ -11,8 +11,8 @@ import os
 import time
 from tqdm import tqdm
 
-client = Groq(api_key="API_KEY")
 
+client = Groq(api_key="API-KEY") # abhilekh_3: 1201- 1501
 
 class ClimmemeDataset:
     def __init__(self, dataset_name):
@@ -50,7 +50,8 @@ if __name__ == "__main__":
     caq = ClimateAlignmentQuotient()
     results = {}
     # Check if the result file exists
-    output_file = "llama70_eval.json"
+    output_file = "llama70_eval_1201_1501.json"
+    # output_file = "llama70_eval_901_1201.json"
     if os.path.exists(output_file):
         with open(output_file, "r") as f:
             existing_results = json.load(f)
@@ -59,15 +60,14 @@ if __name__ == "__main__":
         results = existing_results
     else:
         # Start from the beginning of the dataset
-        start_idx = 0
+        start_idx = 1201
         results = {}
     #data traversal
-    for idx in tqdm(range(start_idx, len(dataset)), desc="Processing dataset"):
+    for idx in tqdm(range(start_idx, 1501), desc="Processing dataset"):
         text, description = dataset[idx]
         try:
             prompts = Prompts().with_description(description)
 
-            axioms = {}
             results[idx] = {
                 "text": text,
                 "description": description,
@@ -90,7 +90,7 @@ if __name__ == "__main__":
                     "specificity": caq_results['component_scores']['specificity'],
                     "caq": caq_results['component_scores']['caq'],
                 }
-            output_file = "llama70_eval.json"
+            
             with open(output_file, "w") as f:
                 json.dump(results, f, indent=4)
 

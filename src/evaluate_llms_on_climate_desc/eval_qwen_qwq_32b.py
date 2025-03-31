@@ -1,12 +1,13 @@
 import torch
 import sys
 import os
-sys.path.append("/scratch/user/hasnat.md.abdullah/Climmeme/src")
+sys.path.append("Climmeme/src")
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from eval_llama_70b import ClimmemeDataset, Prompts
 from caq import ClimateAlignmentQuotient
 import json
 from tqdm import tqdm
+import argparse
 class QwenModel:
     def __init__(self, model_name="Qwen/QwQ-32B-AWQ"):
         # Check if GPU is available
@@ -41,28 +42,40 @@ class QwenModel:
 
 # Example usage
 if __name__ == "__main__":
+
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Evaluate Qwen model on climate dataset.")
+    parser.add_argument("--file", type=str, required=True, help="Output file name.")
+    parser.add_argument("--start_idx", type=int, default=0, help="Start index for processing.")
+    parser.add_argument("--end_idx", type=int, default=None, help="End index for processing.")
+    args = parser.parse_args()
+
     dataset = ClimmemeDataset("climedataset/CliME")
     caq = ClimateAlignmentQuotient()
     qwen_model = QwenModel()
-     # Check if the result file exists
-    output_file = "qwen_qwq_32B_eval.json"
+
+    output_file = args.file
+    start_idx = args.start_idx
+    end_idx = args.end_idx if args.end_idx is not None else len(dataset)
+
+    # Check if the result file exists
     if os.path.exists(output_file):
         with open(output_file, "r") as f:
             existing_results = json.load(f)
-        # Start from the next index after the last available key
-        start_idx = max(map(int, existing_results.keys())) + 1
+        # Start from the next index after the last available key if start_idx is not explicitly provided
+        start_idx = max(start_idx, max(map(int, existing_results.keys())) + 1)
         results = existing_results
     else:
-        # Start from the beginning of the dataset
-        start_idx = 0
         results = {}
-    #data traversal
-    for idx in tqdm(range(start_idx, len(dataset)), desc="Processing dataset"):
+
+    print(f"start_idx = {start_idx}")
+    print(f"end_idx = {end_idx}")
+    # Data traversal
+    for idx in tqdm(range(start_idx, end_idx), desc="Processing dataset"):
         text, description = dataset[idx]
         try:
             prompts = Prompts().with_description(description)
 
-            axioms = {}
             results[idx] = {
                 "text": text,
                 "description": description,
@@ -79,7 +92,7 @@ if __name__ == "__main__":
                     "specificity": caq_results['component_scores']['specificity'],
                     "caq": caq_results['component_scores']['caq'],
                 }
-            output_file = "qwen_qwq_32B_eval.json"
+
             with open(output_file, "w") as f:
                 json.dump(results, f, indent=4)
 
@@ -87,17 +100,5 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Error processing post {idx}: {e}")
             exit()
+
     print("Done")
-    
-
-
-
-
-
-
-
-
-
-    # prompt = "Explain how neural networks work in simple terms:"
-    # response = qwen_model.generate_response(prompt)
-    # print(response)
