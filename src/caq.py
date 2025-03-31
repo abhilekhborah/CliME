@@ -286,12 +286,12 @@ class ClimateAlignmentQuotient:
 
         # Create human-readable component names for output
         readable_components = {
-            "detector": "Climate Relevance Detection Score",
-            "as": "Articulation Score",
-            "transition_physical": "Climate Transition Physical Score",
-            "evidence": "Climate Evidence Score",
-            "specificity": "Climate Specificity Score",
-            "caq": "Climate Actionability Quotient"
+            "detector": "Resonance",
+            "as": "Articulation",
+            "transition_physical": "Transition",
+            "evidence": "Evidence",
+            "specificity": "Specificity",
+            "caq": "Alignment"
         }
 
         # Add CAQ score to component scores
