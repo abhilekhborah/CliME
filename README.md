@@ -1,19 +1,84 @@
 # CliME
 
-## 1.0 Data Creation
-- Dataset link: [CliME](https://huggingface.co/datasets/climedataset/CliME)
-- scripts can be found on [src/data_creation](src/data_creation/)
+This repository provides a complete framework for climate-related data creation, content description, evaluation of LLM responses, and the Climate Alignment Index (CAQ).
 
-## 2.0 content description
-### 2.1 Module: Janus Pro (VLM)
-- path: [VLMs/Janus](VLMs/Janus)
-- Install related packages 
-    ```bash  
-        cd VLMs/Janus
-        pip install -e .
-    ```
-### 2.2 Description Generation
-- run [generate_summary_from_img_text.py](src/content_description/generate_summary_from_img_text.py)
+- **Dataset**: [CliME](https://huggingface.co/datasets/climedataset/CliME)
 
-### 3.0 Generate LLM Responses on Descriptions
+## Data Creation
+
+Scripts for data creation are available in [`src/data_creation`](src/data_creation/). They include:
+- `reddit_scrapping.py`
+- `tweet_scraping.py`
+
+These scripts are designed to scrape and process climate-related data from various sources.
+
+## Content Description
+
+### Janus Pro (VLM)
+
+Located in [`VLMs/Janus`](VLMs/Janus), Janus Pro is used to generate visual-linguistic features for detailed descriptions of climate imagery.
+
+**Installation:**
+```bash
+cd VLMs/Janus
+pip install -e .
+```
+
+### Description Generation
+
+Generate summaries by combining image and text data using the script:
+`generate_summary_from_img_text.py`
+
+**Usage:**
+```bash
+python src/content_description/generate_summary_from_img_text.py --input_dir /path/to/images --output_file summaries.json
+```
+
+## Climate Alignment Index (CAQ)
+
+The Climate Alignment Index (CAQ) is a novel metric designed to:
+- Quantify the relevance and accuracy of climate descriptions.
 - 
+CAQ routines and evaluations are integrated into the repository (see `caq.py` in the root directory for CAQ-related functionalities).
+
+## Generating LLM Responses
+
+Evaluate LLM responses using the generated summaries and the CAQ. Evaluation scripts are provided in `src/evaluate_llms_on_climate_desc`. For example, to run an evaluation using Gemini Flash2, execute:
+
+```bash
+python src/evaluate_llms_on_climate_desc/eval_gemini_flash2.py
+```
+
+Other available evaluation scripts include:
+- `eval_llama_70b.py`
+- `eval_qwen_qwq_32b.py`
+- `eval_sonnet_37.py`
+- `gpt_eval.py`
+
+## Project Structure
+
+```
+├── src
+│   ├── content_description
+│   │   └── generate_summary_from_img_text.py
+│   ├── data_creation
+│   │   ├── reddit_scrapping.py
+│   │   └── tweet_scraping.py
+│   ├── evaluate_llms_on_climate_desc
+│   │   ├── eval_gemini_flash2.py
+│   │   ├── eval_llama_70b.py
+│   │   ├── eval_qwen_qwq_32b.py
+│   │   ├── eval_sonnet_37.py
+│   │   └── gpt_eval.py
+│   ├── cpaq.py            # CAQ related routines
+│   ├── plot_3d.py
+│   └── plot_gen.py
+├── VLMs
+│   └── Janus
+│       ├── setup.py
+│       └── ...
+├── .gitignore
+├── .gitmodules
+├── LICENSE
+└── README.md
+```
