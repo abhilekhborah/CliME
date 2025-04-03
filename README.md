@@ -29,9 +29,11 @@ pip install -e .
 Generate summaries by combining image and text data using the script:
 `generate_summary_from_img_text.py`
 
+- Loads the Clime Dataset from the Huggingface, processes and saves in the local disk. 
+
 **Usage:**
 ```bash
-python src/content_description/generate_summary_from_img_text.py --input_dir /path/to/images --output_file summaries.json
+python src/content_description/generate_summary_from_img_text.py
 ```
 
 ## Climate Alignment Index (CAQ)
