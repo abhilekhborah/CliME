@@ -1,4 +1,4 @@
-# CliME
+# CliME (ACL '25 NLP4PI) - Outstanding Paper Award
 
 This repository provides a complete framework for climate-related data creation, content description, evaluation of LLM responses, and the Climate Alignment Index (CAQ).
 
